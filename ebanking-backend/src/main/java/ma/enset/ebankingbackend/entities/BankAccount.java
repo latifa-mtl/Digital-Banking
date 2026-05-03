@@ -18,9 +18,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BankAccount {
+public abstract class BankAccount {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     private double balance;
     private Date createdAt;
@@ -29,7 +28,7 @@ public class BankAccount {
     private AccountStatus accountStatus;
     @ManyToOne
     private Customer customer;
-    @OneToMany(mappedBy = "bankAccount")
+    @OneToMany(mappedBy = "bankAccount", fetch = FetchType.EAGER)
     private List<AccountOperation>  accountOperations;
 
 }
