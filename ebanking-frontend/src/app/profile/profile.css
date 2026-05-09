@@ -1,0 +1,128 @@
+.page { padding: 2rem 2.5rem; max-width: 1100px; margin: 0 auto; }
+
+.page-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 1.75rem;
+}
+.page-header h1 { font-size: 26px; font-weight: 700; color: #0f2d5c; margin: 0 0 4px; }
+.subtitle { color: #6b7a95; font-size: 14px; margin: 0; }
+
+/* ── Logout button ────────────────────────────────────────── */
+.btn-logout {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #fff; color: #dc3545;
+  padding: 10px 18px; border-radius: 10px;
+  font-size: 14px; font-weight: 600;
+  border: 1.5px solid #f5c6cb; cursor: pointer;
+  transition: all 0.18s;
+}
+.btn-logout:hover { background: #fce8e8; border-color: #dc3545; }
+
+/* ── Layout ───────────────────────────────────────────────── */
+.profile-layout { display: flex; flex-direction: column; gap: 20px; }
+
+/* ── Identity card ────────────────────────────────────────── */
+.identity-card {
+  background: linear-gradient(135deg, #0f2d5c 0%, #1a6fd4 100%);
+  border-radius: 16px; padding: 28px 32px;
+  display: flex; align-items: center; gap: 20px;
+  box-shadow: 0 4px 20px rgba(26,111,212,0.2);
+}
+
+.avatar {
+  width: 64px; height: 64px;
+  background: rgba(255,255,255,0.18);
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+  letter-spacing: 0.5px;
+}
+
+.identity-info { flex: 1; }
+.identity-name { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.identity-sub  { font-size: 13px; color: rgba(255,255,255,0.65); }
+
+.roles-wrap { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.role-badge {
+  padding: 5px 12px; border-radius: 20px;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.role-badge.admin { background: #ffd700; color: #7a5a00; }
+.role-badge.user  { background: rgba(255,255,255,0.2); color: #fff; }
+
+/* ── Info grid ────────────────────────────────────────────── */
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.info-card {
+  background: #fff; border: 1px solid #e4eaf4;
+  border-radius: 14px; padding: 22px 24px;
+  box-shadow: 0 1px 4px rgba(15,45,92,0.05);
+}
+
+.token-card { grid-column: 1 / -1; }
+
+.info-card-header {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 14px; font-weight: 700; color: #0f2d5c;
+  margin-bottom: 18px; padding-bottom: 12px;
+  border-bottom: 1px solid #f0f4fa;
+}
+.info-card-header svg { color: #1a6fd4; flex-shrink: 0; }
+
+/* ── Info rows ────────────────────────────────────────────── */
+.info-rows { display: flex; flex-direction: column; gap: 0; }
+
+.info-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid #f5f7fb;
+}
+.info-row:last-child { border-bottom: none; }
+
+.ir-label { font-size: 13px; color: #6b7a95; font-weight: 500; }
+.ir-value {
+  font-size: 13px; font-weight: 600; color: #1a2b4a;
+  display: flex; align-items: center; gap: 7px;
+}
+.ir-value.mono { font-family: monospace; font-size: 12px; }
+
+.status-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+.status-dot.active { background: #198754; box-shadow: 0 0 0 2px rgba(25,135,84,0.2); }
+
+/* ── Permission checks ────────────────────────────────────── */
+.perm-check {
+  width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.perm-check.yes { background: #e6f4ea; color: #198754; }
+.perm-check:not(.yes) { background: #fce8e8; color: #dc3545; }
+
+/* ── Token preview ────────────────────────────────────────── */
+.token-preview {
+  font-family: 'Courier New', monospace; font-size: 12px;
+  color: #4a5568; background: #f7faff;
+  border: 1px solid #e4eaf4; border-radius: 8px;
+  padding: 12px 14px; word-break: break-all; line-height: 1.6;
+}
+
+.copy-btn {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 5px;
+  background: #f0f4fa; border: 1px solid #d1d9e8;
+  border-radius: 7px; padding: 5px 11px;
+  font-size: 12px; font-weight: 600; color: #4a5568;
+  cursor: pointer; transition: all 0.18s;
+}
+.copy-btn:hover { background: #e4eaf4; }
+.copy-btn.copied { background: #e6f4ea; color: #198754; border-color: #b8e0c8; }
+
+@media (max-width: 700px) {
+  .info-grid { grid-template-columns: 1fr; }
+  .token-card { grid-column: 1; }
+  .identity-card { flex-direction: column; text-align: center; }
+  .roles-wrap { justify-content: center; }
+}

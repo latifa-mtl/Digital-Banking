@@ -1,1 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
+/* Global Reset & Base */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  background: #f3f6fb;
+  color: #1a2b4a;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { margin: 0; font-weight: 700; }
+
+a { color: inherit; }
+
+button { font-family: inherit; }
+
+input, select, textarea { font-family: inherit; }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c5d0e6; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #a8b8d8; }

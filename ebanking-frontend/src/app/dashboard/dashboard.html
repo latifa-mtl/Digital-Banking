@@ -1,0 +1,226 @@
+<div class="dashboard">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1>Dashboard</h1>
+      <p class="subtitle">Banking operations overview</p>
+    </div>
+    <a routerLink="/new-customer" class="btn-primary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      Add Customer
+    </a>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-state" *ngIf="loading">
+    <div class="spinner"></div><p>Loading dashboard…</p>
+  </div>
+
+  <!-- Error -->
+  <div class="error-banner" *ngIf="error">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg>
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="data && !loading">
+
+    <!-- KPI Grid -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon blue">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/><path d="M16 3.13a4 4 0 010 7.75M21 21v-2a4 4 0 00-3-3.87"/></svg>
+        </div>
+        <div class="kpi-data">
+          <span class="kpi-value">{{ data.totalCustomers }}</span>
+          <span class="kpi-label">Total Customers</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon indigo">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+        </div>
+        <div class="kpi-data">
+          <span class="kpi-value">{{ data.totalAccounts }}</span>
+          <span class="kpi-label">Total Accounts</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon green">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div class="kpi-data">
+          <span class="kpi-value">{{ data.totalBalance | number:'1.0-0' }}</span>
+          <span class="kpi-label">Total Balance (MAD)</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon teal">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="kpi-data">
+          <span class="kpi-value">{{ data.totalOperations }}</span>
+          <span class="kpi-label">Total Operations</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon emerald">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        </div>
+        <div class="kpi-data">
+          <span class="kpi-value">{{ data.totalCreditAmount | number:'1.0-0' }}</span>
+          <span class="kpi-label">Total Credits (MAD)</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon red">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+        </div>
+        <div class="kpi-data">
+          <span class="kpi-value">{{ data.totalDebitAmount | number:'1.0-0' }}</span>
+          <span class="kpi-label">Total Debits (MAD)</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon sky">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M7 15h2m4 0h4"/></svg>
+        </div>
+        <div class="kpi-data">
+          <span class="kpi-value">{{ data.activeAccounts }}</span>
+          <span class="kpi-label">Active Accounts</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon orange">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+        </div>
+        <div class="kpi-data">
+          <span class="kpi-value">{{ data.suspendedAccounts }}</span>
+          <span class="kpi-label">Suspended Accounts</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="content-grid">
+
+      <!-- Recent customers -->
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Recent Customers</h2>
+          <a routerLink="/customers" class="link-btn">View all →</a>
+        </div>
+        <div class="list-body">
+          <div class="customer-row" *ngFor="let c of data.recentCustomers">
+            <div class="avatar" [style.background]="avatarColor(c.name)">{{ getInitial(c.name) }}</div>
+            <div class="row-info">
+              <span class="row-primary">{{ c.name }}</span>
+              <span class="row-secondary">{{ c.email }}</span>
+            </div>
+            <span class="row-id">#{{ c.id }}</span>
+          </div>
+          <div class="empty-list" *ngIf="data.recentCustomers.length === 0">No customers yet</div>
+        </div>
+      </div>
+
+      <!-- Recent accounts -->
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Recent Accounts</h2>
+          <a routerLink="/accounts" class="link-btn">View all →</a>
+        </div>
+        <div class="list-body">
+          <div class="account-row" *ngFor="let a of data.recentAccounts">
+            <div class="row-left">
+              <span class="type-badge" [class]="typeClass(a.type)">{{ typeLabel(a.type) }}</span>
+              <div class="row-info">
+                <span class="row-primary">{{ a.customerName }}</span>
+                <span class="row-secondary mono">{{ a.id | slice:0:14 }}…</span>
+              </div>
+            </div>
+            <div class="row-right">
+              <span class="acc-balance">{{ a.balance | number:'1.2-2' }}</span>
+              <span class="status-dot" [class]="statusClass(a.status)">{{ a.status }}</span>
+            </div>
+          </div>
+          <div class="empty-list" *ngIf="data.recentAccounts.length === 0">No accounts yet</div>
+        </div>
+      </div>
+
+      <!-- Recent operations -->
+      <div class="panel ops-panel">
+        <div class="panel-header">
+          <h2>Recent Transactions</h2>
+          <a routerLink="/accounts" class="link-btn">View all →</a>
+        </div>
+        <div class="list-body">
+          <div class="op-row" *ngFor="let op of data.recentOperations">
+            <div class="op-icon" [class]="op.type === 'CREDIT' ? 'credit' : 'debit'">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <ng-container *ngIf="op.type === 'CREDIT'"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></ng-container>
+                <ng-container *ngIf="op.type === 'DEBIT'"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></ng-container>
+              </svg>
+            </div>
+            <div class="row-info">
+              <span class="row-primary">{{ op.customerName }}</span>
+              <span class="row-secondary">{{ op.description || '—' }} · {{ op.operationDate | date:'dd/MM/yy HH:mm' }}</span>
+            </div>
+            <span class="op-amount" [class]="op.type === 'CREDIT' ? 'credit' : 'debit'">
+              {{ op.type === 'CREDIT' ? '+' : '-' }}{{ op.amount | number:'1.2-2' }}
+            </span>
+          </div>
+          <div class="empty-list" *ngIf="data.recentOperations.length === 0">No transactions yet</div>
+        </div>
+      </div>
+
+      <!-- Account breakdown panel -->
+      <div class="panel breakdown-panel">
+        <div class="panel-header">
+          <h2>Account Breakdown</h2>
+        </div>
+        <div class="breakdown-body">
+          <div class="bd-row">
+            <span class="bd-label">Current Accounts</span>
+            <div class="bd-track"><div class="bd-fill current" [style.width.%]="currentPct()"></div></div>
+            <span class="bd-count">{{ data.currentAccounts }}</span>
+          </div>
+          <div class="bd-row">
+            <span class="bd-label">Saving Accounts</span>
+            <div class="bd-track"><div class="bd-fill saving" [style.width.%]="savingPct()"></div></div>
+            <span class="bd-count">{{ data.savingAccounts }}</span>
+          </div>
+          <div class="bd-row">
+            <span class="bd-label">Active</span>
+            <div class="bd-track"><div class="bd-fill active" [style.width.%]="activePct()"></div></div>
+            <span class="bd-count">{{ data.activeAccounts }}</span>
+          </div>
+          <div class="bd-row">
+            <span class="bd-label">Suspended</span>
+            <div class="bd-track"><div class="bd-fill suspended" [style.width.%]="data.totalAccounts ? (data.suspendedAccounts/data.totalAccounts*100) : 0"></div></div>
+            <span class="bd-count">{{ data.suspendedAccounts }}</span>
+          </div>
+
+          <!-- Cash-flow bar -->
+          <div class="flow-section">
+            <div class="flow-header">
+              <span class="flow-label credit-lbl">Credits {{ data.totalCreditAmount | number:'1.0-0' }}</span>
+              <span class="flow-label debit-lbl">Debits {{ data.totalDebitAmount | number:'1.0-0' }}</span>
+            </div>
+            <div class="flow-track">
+              <div class="flow-credit" [style.width.%]="flowPct()"></div>
+              <div class="flow-debit" [style.width.%]="100 - flowPct()"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </ng-container>
+</div>

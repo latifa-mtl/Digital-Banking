@@ -1,0 +1,99 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>My Profile</h1>
+      <p class="subtitle">Account settings & session info</p>
+    </div>
+    <button class="btn-logout" (click)="logout()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+        <polyline points="16 17 21 12 16 7"/>
+        <line x1="21" y1="12" x2="9" y2="12"/>
+      </svg>
+      Sign Out
+    </button>
+  </div>
+
+  <div class="profile-layout" *ngIf="profile">
+    <!-- Identity card -->
+    <div class="identity-card">
+      <div class="avatar">
+        {{ getInitials(profile.username) }}
+      </div>
+      <div class="identity-info">
+        <div class="identity-name">{{ profile.username }}</div>
+        <div class="identity-sub">Authenticated User</div>
+      </div>
+      <div class="roles-wrap">
+        <span class="role-badge" *ngFor="let role of profile.roles" [class]="getRoleClass(role)">
+          {{ formatRole(role) }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Info grid -->
+    <div class="info-grid">
+      <!-- Session card -->
+      <div class="info-card">
+        <div class="info-card-header">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Session</span>
+        </div>
+        <div class="info-rows">
+          <div class="info-row">
+            <span class="ir-label">Status</span>
+            <span class="ir-value">
+              <span class="status-dot active"></span> Active
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="ir-label">Issued At</span>
+            <span class="ir-value">{{ issuedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="ir-label">Expires At</span>
+            <span class="ir-value">{{ expiresAt | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="ir-label">Algorithm</span>
+            <span class="ir-value mono">HS512</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Permissions card -->
+      <div class="info-card">
+        <div class="info-card-header">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          <span>Permissions</span>
+        </div>
+        <div class="info-rows">
+          <div class="info-row" *ngFor="let perm of getPermissions()">
+            <span class="ir-label">{{ perm.label }}</span>
+            <span class="ir-value">
+              <span class="perm-check" [class.yes]="perm.granted">
+                <svg *ngIf="perm.granted" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg *ngIf="!perm.granted" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </span>
+              {{ perm.granted ? 'Granted' : 'Not granted' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Token card -->
+      <div class="info-card token-card">
+        <div class="info-card-header">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          <span>Access Token</span>
+          <button class="copy-btn" (click)="copyToken()" [class.copied]="tokenCopied">
+            <svg *ngIf="!tokenCopied" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            <svg *ngIf="tokenCopied" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            {{ tokenCopied ? 'Copied!' : 'Copy' }}
+          </button>
+        </div>
+        <div class="token-preview">{{ tokenPreview }}</div>
+      </div>
+    </div>
+  </div>
+</div>
