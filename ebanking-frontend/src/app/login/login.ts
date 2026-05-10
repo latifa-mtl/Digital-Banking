@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
-  // ✅ Use ngOnInit instead of constructor for redirect check
+  //  Use ngOnInit instead of constructor for redirect check
   //    avoids the double-click race condition
   ngOnInit(): void {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
