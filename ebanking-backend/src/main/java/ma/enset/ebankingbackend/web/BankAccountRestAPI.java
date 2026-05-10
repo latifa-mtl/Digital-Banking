@@ -3,6 +3,7 @@ package ma.enset.ebankingbackend.web;
 import ma.enset.ebankingbackend.dtos.*;
 import ma.enset.ebankingbackend.exceptions.BalanceNotSufficientException;
 import ma.enset.ebankingbackend.exceptions.BankAccountNotFoundException;
+import ma.enset.ebankingbackend.exceptions.CustomerNotFoundException;
 import ma.enset.ebankingbackend.services.BankAccountService;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @author admin
  **/
 @RestController
-@CrossOrigin("*")
+//@CrossOrigin("*")
 public class BankAccountRestAPI {
     private BankAccountService bankAccountService;
 
@@ -56,5 +57,21 @@ public class BankAccountRestAPI {
                 transferRequestDTO.getAccountSource(),
                 transferRequestDTO.getAccountDestination(),
                 transferRequestDTO.getAmount());
+    }
+
+    @PostMapping("/accounts/saveCurrent")
+    public BankAccountDTO saveCurrentAccount(
+            @RequestParam double initialBalance,
+            @RequestParam double overDraft,
+            @RequestParam Long customerId) throws CustomerNotFoundException {
+        return bankAccountService.saveCurrentBankAccount(initialBalance, overDraft, customerId);
+    }
+
+    @PostMapping("/accounts/saveSaving")
+    public BankAccountDTO saveSavingAccount(
+            @RequestParam double initialBalance,
+            @RequestParam double interestRate,
+            @RequestParam Long customerId) throws CustomerNotFoundException {
+        return bankAccountService.saveSavingBankAccount(initialBalance, interestRate, customerId);
     }
 }
