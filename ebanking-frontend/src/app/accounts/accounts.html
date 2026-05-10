@@ -1,22 +1,33 @@
+<!-- ─── Page ─────────────────────────────────────────────────────── -->
 <div class="page">
   <div class="page-header">
     <div>
       <h1>Accounts</h1>
       <p class="subtitle">{{ filtered.length }} of {{ accounts.length }} accounts</p>
     </div>
-    <button class="btn-transfer" (click)="showTransferModal = true">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+    <button class="btn-transfer" (click)="openTransfer()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/>
+        <polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/>
+      </svg>
       Transfer
     </button>
   </div>
 
-  <div class="alert success" *ngIf="successMsg">{{ successMsg }}</div>
-  <div class="alert error" *ngIf="errorMsg">{{ errorMsg }}</div>
+  <div class="alert success" *ngIf="successMsg">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    {{ successMsg }}
+  </div>
+  <div class="alert error" *ngIf="errorMsg && !showOperationModal && !showTransferModal">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>
+    {{ errorMsg }}
+  </div>
 
+  <!-- Filters -->
   <div class="filter-bar">
     <div class="search-wrap">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" placeholder="Search by account ID..." [(ngModel)]="searchId" (ngModelChange)="applyFilters()" class="filter-input" />
+      <input type="text" placeholder="Search by account ID or owner…" [(ngModel)]="searchId" (ngModelChange)="applyFilters()" class="filter-input"/>
     </div>
     <select class="filter-select" [(ngModel)]="filterType" (ngModelChange)="applyFilters()">
       <option value="ALL">All Types</option>
@@ -31,33 +42,34 @@
     </select>
   </div>
 
+  <!-- Main layout -->
   <div class="content-layout">
-    <!-- Account List -->
+
+    <!-- Left: account cards -->
     <div class="accounts-list-panel">
-      <div class="loading-state" *ngIf="loading">
-        <div class="spinner"></div>
-      </div>
+      <div class="loading-state" *ngIf="loading"><div class="spinner"></div></div>
+
       <div class="account-card" *ngFor="let acc of filtered"
-        [class.selected]="selectedAccount?.id === acc.id"
-        (click)="selectAccount(acc)">
+           [class.selected]="selectedAccount?.id === acc.id"
+           (click)="selectAccount(acc)">
         <div class="ac-top">
-          <span class="ac-type-badge" [class]="acc.type === 'CurrentAccount' ? 'current' : 'saving'">
-            {{ getTypeLabel(acc.type) }}
-          </span>
+          <span class="ac-type-badge" [class]="getTypeClass(acc.type)">{{ getTypeLabel(acc.type) }}</span>
           <span class="ac-status" [class]="getStatusClass(acc.status)">{{ acc.status }}</span>
         </div>
-        <div class="ac-id">{{ acc.id | slice:0:16 }}...</div>
+        <div class="ac-id">{{ acc.id | slice:0:18 }}…</div>
         <div class="ac-owner">{{ acc.customerDTO.name }}</div>
         <div class="ac-balance">{{ acc.balance | number:'1.2-2' }} <span class="ac-currency">MAD</span></div>
-        <div class="ac-meta" *ngIf="acc.overDraft !== undefined">Overdraft: {{ acc.overDraft | number:'1.0-0' }}</div>
-        <div class="ac-meta" *ngIf="acc.interestRate !== undefined">Rate: {{ acc.interestRate }}%</div>
+        <div class="ac-meta" *ngIf="acc.overDraft">Overdraft: {{ acc.overDraft | number:'1.0-0' }} MAD</div>
+        <div class="ac-meta" *ngIf="acc.interestRate">Rate: {{ acc.interestRate }}%</div>
       </div>
+
       <div class="empty-state" *ngIf="filtered.length === 0 && !loading">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#c5cfe8" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
         <p>No accounts match filters</p>
       </div>
     </div>
 
-    <!-- Detail Panel -->
+    <!-- Right: detail -->
     <div class="detail-panel" *ngIf="selectedAccount; else noSelection">
       <div class="detail-header">
         <div>
@@ -65,7 +77,7 @@
           <div class="detail-owner">{{ selectedAccount.customerDTO.name }} &middot; {{ selectedAccount.customerDTO.email }}</div>
         </div>
         <div class="detail-actions">
-          <button class="btn-op debit" (click)="openOperation('DEBIT')">
+          <button class="btn-op debit"  (click)="openOperation('DEBIT')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
             Debit
           </button>
@@ -81,11 +93,11 @@
           <span class="bc-label">Current Balance</span>
           <span class="bc-value">{{ selectedAccount.balance | number:'1.2-2' }} MAD</span>
         </div>
-        <div class="balance-card" *ngIf="selectedAccount.overDraft !== undefined">
+        <div class="balance-card" *ngIf="selectedAccount.overDraft">
           <span class="bc-label">Overdraft Limit</span>
           <span class="bc-value">{{ selectedAccount.overDraft | number:'1.0-0' }} MAD</span>
         </div>
-        <div class="balance-card" *ngIf="selectedAccount.interestRate !== undefined">
+        <div class="balance-card" *ngIf="selectedAccount.interestRate">
           <span class="bc-label">Interest Rate</span>
           <span class="bc-value">{{ selectedAccount.interestRate }}%</span>
         </div>
@@ -98,7 +110,7 @@
           <div class="ops-list">
             <div class="op-row" *ngFor="let op of history.accountOperationDTOS">
               <div class="op-icon" [class]="op.type === 'CREDIT' ? 'credit' : 'debit'">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                   <ng-container *ngIf="op.type === 'CREDIT'"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></ng-container>
                   <ng-container *ngIf="op.type === 'DEBIT'"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></ng-container>
                 </svg>
@@ -111,12 +123,11 @@
                 {{ op.type === 'CREDIT' ? '+' : '-' }}{{ op.amount | number:'1.2-2' }}
               </div>
             </div>
+            <div class="empty-ops" *ngIf="history.accountOperationDTOS.length === 0">No transactions yet</div>
           </div>
-
           <div class="pagination" *ngIf="history.totalPages > 1">
             <button class="pg-btn" *ngFor="let p of getPageArray()"
-              [class.active]="p === history.currentPage"
-              (click)="loadPage(p)">{{ p + 1 }}</button>
+              [class.active]="p === history.currentPage" (click)="loadPage(p)">{{ p + 1 }}</button>
           </div>
         </div>
       </div>
@@ -131,58 +142,175 @@
   </div>
 </div>
 
-<!-- Operation Modal -->
-<div class="modal-overlay" *ngIf="showOperationModal" (click)="showOperationModal = false">
-  <div class="modal" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <h3>{{ operationType === 'DEBIT' ? 'Debit' : 'Credit' }} Operation</h3>
-      <button class="modal-close" (click)="showOperationModal = false">✕</button>
+<!-- ─── DEBIT / CREDIT MODAL — outside .page ─────────────────────── -->
+<div class="modal-backdrop" *ngIf="showOperationModal" (click)="closeOperation()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+
+    <div class="modal-header" [class.debit-header]="operationType==='DEBIT'" [class.credit-header]="operationType==='CREDIT'">
+      <div class="modal-title-row">
+        <div class="modal-op-icon">
+          <!-- Debit icon -->
+          <svg *ngIf="operationType==='DEBIT'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          <!-- Credit icon -->
+          <svg *ngIf="operationType==='CREDIT'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        </div>
+        <div>
+          <h3 class="modal-title">{{ operationType === 'DEBIT' ? 'Debit Account' : 'Credit Account' }}</h3>
+          <p class="modal-subtitle">{{ operationAccountId | slice:0:20 }}…</p>
+        </div>
+      </div>
+      <button class="modal-close-btn" (click)="closeOperation()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
     </div>
+
     <div class="modal-body">
-      <div class="form-group">
-        <label>Account ID</label>
-        <input type="text" name="op-account-id" [(ngModel)]="operationAccountId" class="form-input" />
+      <!-- Inline error -->
+      <div class="modal-error" *ngIf="errorMsg && showOperationModal">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>
+        {{ errorMsg }}
       </div>
-      <div class="form-group">
-        <label>Amount (MAD)</label>
-        <input type="number" name="op-amount" [(ngModel)]="operationAmount" class="form-input" min="0" />
+
+      <div class="field-group">
+        <label class="field-label">Account ID</label>
+        <input name="op-acc" type="text" class="field-input readonly" [value]="operationAccountId" readonly/>
       </div>
-      <div class="form-group">
-        <label>Description</label>
-        <input type="text" name="op-description" [(ngModel)]="operationDesc" class="form-input" placeholder="Optional" />
+
+      <div class="field-group">
+        <label class="field-label">Amount (MAD)</label>
+        <div class="amount-wrap">
+          <span class="amount-prefix">MAD</span>
+          <input name="op-amount" type="number" class="field-input amount-input"
+            [(ngModel)]="operationAmount" min="1" placeholder="0.00"/>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Description <span class="optional">(optional)</span></label>
+        <input name="op-desc" type="text" class="field-input"
+          [(ngModel)]="operationDesc" placeholder="e.g. Monthly salary, Payment…"/>
       </div>
     </div>
+
     <div class="modal-footer">
-      <button class="btn-ghost" (click)="showOperationModal = false">Cancel</button>
-      <button class="btn-primary" [class.credit-btn]="operationType === 'CREDIT'" (click)="submitOperation()">Confirm</button>
+      <button class="btn-cancel" (click)="closeOperation()">Cancel</button>
+      <button class="btn-confirm"
+        [class.debit-btn]="operationType==='DEBIT'"
+        [class.credit-btn]="operationType==='CREDIT'"
+        (click)="submitOperation()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Confirm {{ operationType | titlecase }}
+      </button>
     </div>
   </div>
 </div>
 
-<!-- Transfer Modal -->
-<div class="modal-overlay" *ngIf="showTransferModal" (click)="showTransferModal = false">
-  <div class="modal" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <h3>Transfer Funds</h3>
-      <button class="modal-close" (click)="showTransferModal = false">✕</button>
+<!-- ─── TRANSFER MODAL — outside .page ───────────────────────────── -->
+<div class="modal-backdrop" *ngIf="showTransferModal" (click)="closeTransfer()">
+  <div class="modal-box modal-wide" (click)="$event.stopPropagation()">
+
+    <div class="modal-header transfer-header">
+      <div class="modal-title-row">
+        <div class="modal-op-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/>
+            <polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="modal-title">Transfer Funds</h3>
+          <p class="modal-subtitle">Between existing accounts</p>
+        </div>
+      </div>
+      <button class="modal-close-btn" (click)="closeTransfer()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
     </div>
+
     <div class="modal-body">
-      <div class="form-group">
-        <label>Source Account ID</label>
-        <input type="text" name="transfer-source" [(ngModel)]="transferSource" class="form-input" placeholder="Source account" />
+      <!-- Inline error -->
+      <div class="modal-error" *ngIf="errorMsg && showTransferModal">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>
+        {{ errorMsg }}
       </div>
-      <div class="form-group">
-        <label>Destination Account ID</label>
-        <input type="text" name="transfer-dest" [(ngModel)]="transferDest" class="form-input" placeholder="Destination account" />
+
+      <!-- Source account dropdown -->
+      <div class="field-group">
+        <label class="field-label">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          From Account
+        </label>
+        <select name="transfer-source" class="field-select" [(ngModel)]="transferSource" (ngModelChange)="errorMsg=''">
+          <option value="">— Select source account —</option>
+          <option *ngFor="let a of accounts" [value]="a.id" [disabled]="a.status !== 'ACTIVATED'">
+            {{ a.customerDTO.name }} · {{ a.id | slice:0:12 }}… · {{ a.balance | number:'1.0-0' }} MAD
+            {{ a.status !== 'ACTIVATED' ? '('+a.status+')' : '' }}
+          </option>
+        </select>
+        <!-- Preview of selected source -->
+        <div class="account-preview" *ngIf="transferSource">
+          <ng-container *ngFor="let a of accounts">
+            <ng-container *ngIf="a.id === transferSource">
+              <div class="preview-chip">
+                <span class="type-badge" [class]="getTypeClass(a.type)">{{ getTypeLabel(a.type) }}</span>
+                <span class="preview-name">{{ a.customerDTO.name }}</span>
+                <span class="preview-bal">{{ a.balance | number:'1.2-2' }} MAD</span>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Amount (MAD)</label>
-        <input type="number" name="transfer-amount" [(ngModel)]="transferAmount" class="form-input" min="0" />
+
+      <!-- Arrow -->
+      <div class="transfer-arrow">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a6fd4" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+      </div>
+
+      <!-- Destination account dropdown -->
+      <div class="field-group">
+        <label class="field-label">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          To Account
+        </label>
+        <select name="transfer-dest" class="field-select" [(ngModel)]="transferDest" (ngModelChange)="errorMsg=''">
+          <option value="">— Select destination account —</option>
+          <option *ngFor="let a of getDestAccounts()" [value]="a.id">
+            {{ a.customerDTO.name }} · {{ a.id | slice:0:12 }}… · {{ a.balance | number:'1.0-0' }} MAD
+          </option>
+        </select>
+        <!-- Preview of selected dest -->
+        <div class="account-preview" *ngIf="transferDest">
+          <ng-container *ngFor="let a of accounts">
+            <ng-container *ngIf="a.id === transferDest">
+              <div class="preview-chip">
+                <span class="type-badge" [class]="getTypeClass(a.type)">{{ getTypeLabel(a.type) }}</span>
+                <span class="preview-name">{{ a.customerDTO.name }}</span>
+                <span class="preview-bal">{{ a.balance | number:'1.2-2' }} MAD</span>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Amount -->
+      <div class="field-group">
+        <label class="field-label">Amount (MAD)</label>
+        <div class="amount-wrap">
+          <span class="amount-prefix">MAD</span>
+          <input name="transfer-amount" type="number" class="field-input amount-input"
+            [(ngModel)]="transferAmount" min="1" placeholder="0.00"/>
+        </div>
       </div>
     </div>
+
     <div class="modal-footer">
-      <button class="btn-ghost" (click)="showTransferModal = false">Cancel</button>
-      <button class="btn-primary" (click)="submitTransfer()">Transfer</button>
+      <button class="btn-cancel" (click)="closeTransfer()">Cancel</button>
+      <button class="btn-confirm transfer-btn" (click)="submitTransfer()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/>
+        </svg>
+        Confirm Transfer
+      </button>
     </div>
   </div>
 </div>

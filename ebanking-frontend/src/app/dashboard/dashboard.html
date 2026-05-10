@@ -6,10 +6,7 @@
       <h1>Dashboard</h1>
       <p class="subtitle">Banking operations overview</p>
     </div>
-    <a routerLink="/new-customer" class="btn-primary">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-      Add Customer
-    </a>
+  
   </div>
 
   <!-- Loading -->
@@ -203,7 +200,7 @@
           </div>
           <div class="bd-row">
             <span class="bd-label">Suspended</span>
-            <div class="bd-track"><div class="bd-fill suspended" [style.width.%]="data.totalAccounts ? (data.suspendedAccounts/data.totalAccounts*100) : 0"></div></div>
+            <div class="bd-track"><div class="bd-fill suspended" [style.width.%]="data.totalAccounts ? (data.suspendedAccounts / data.totalAccounts) * 100 : 0"></div></div>
             <span class="bd-count">{{ data.suspendedAccounts }}</span>
           </div>
 

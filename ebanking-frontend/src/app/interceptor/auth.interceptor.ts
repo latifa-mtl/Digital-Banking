@@ -1,21 +1,32 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpInterceptorFn, HttpRequest, HttpHandlerFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);
-  const token = authService.getToken();
+/** List of URL fragments that must NEVER receive the Authorization header */
+const PUBLIC_URLS = ['/auth/login', '/auth/register', '/auth/refresh'];
 
-  console.log('Interceptor firing for:', req.url);
-  console.log('Token present:', !!token);
-  console.log('Token value:', token?.slice(0, 20)); 
+export const authInterceptor: HttpInterceptorFn = (
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn
+) => {
+  const auth = inject(AuthService);
 
-  if (token && !req.url.includes('/auth/login')) {
-    const cloned = req.clone({
-      setHeaders: { Authorization: `Bearer ${token}` }
-    });
-    return next(cloned);
+  // ✅ Skip token injection for public endpoints
+  const isPublic = PUBLIC_URLS.some(url => req.url.includes(url));
+  if (isPublic) {
+    console.log('Interceptor: skipping token for public URL:', req.url);
+    return next(req);
   }
 
-  return next(req);
+  const token = auth.getToken();
+  if (!token) {
+    return next(req);
+  }
+
+  // Clone request and attach Bearer token
+  const authReq = req.clone({
+    setHeaders: { Authorization: `Bearer ${token}` }
+  });
+
+  return next(authReq);
 };

@@ -78,28 +78,84 @@
   </div>
 </div>
 
-<!-- Edit Modal -->
-<div class="modal-overlay" *ngIf="showEditModal" (click)="closeEdit()">
-  <div class="modal" (click)="$event.stopPropagation()">
+<!-- ✅ Modal is OUTSIDE .page so no stacking-context issue -->
+<div class="modal-backdrop" *ngIf="showEditModal" (click)="closeEdit()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+
+    <!-- Header -->
     <div class="modal-header">
-      <h3>Edit Customer</h3>
-      <button class="modal-close" (click)="closeEdit()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <div class="modal-title-row">
+        <div class="modal-avatar" *ngIf="editingCustomer" [style.background]="getAvatarColor(editingCustomer.name)">
+          {{ getInitial(editingCustomer.name) }}
+        </div>
+        <div>
+          <h3 class="modal-title">Edit Customer</h3>
+          <p class="modal-subtitle" *ngIf="editingCustomer">ID #{{ editingCustomer.id }}</p>
+        </div>
+      </div>
+      <button class="modal-close-btn" (click)="closeEdit()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
       </button>
     </div>
+
+    <!-- Body with pre-filled data -->
     <div class="modal-body" *ngIf="editingCustomer">
-      <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" name="edit-name" [(ngModel)]="editingCustomer.name" class="form-input" placeholder="Enter name" />
+      <div class="field-group">
+        <label class="field-label" for="edit-name">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M5 21v-2a4 4 0 014-4h6a4 4 0 014 4v2"/></svg>
+          Full Name
+        </label>
+        <input
+          id="edit-name"
+          name="editName"
+          type="text"
+          class="field-input"
+          [(ngModel)]="editingCustomer.name"
+          placeholder="Enter full name"
+          autocomplete="off"
+        />
       </div>
-      <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" name="edit-email" [(ngModel)]="editingCustomer.email" class="form-input" placeholder="Enter email" />
+
+      <div class="field-group">
+        <label class="field-label" for="edit-email">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Email Address
+        </label>
+        <input
+          id="edit-email"
+          name="editEmail"
+          type="email"
+          class="field-input"
+          [(ngModel)]="editingCustomer.email"
+          placeholder="Enter email address"
+          autocomplete="off"
+        />
+      </div>
+
+      <!-- Read-only info row -->
+      <div class="info-row">
+        <div class="info-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+          Customer since onboarding
+        </div>
+        <div class="info-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Active account
+        </div>
       </div>
     </div>
+
+    <!-- Footer -->
     <div class="modal-footer">
-      <button class="btn-ghost" (click)="closeEdit()">Cancel</button>
-      <button class="btn-primary" (click)="saveEdit()">Save Changes</button>
+      <button class="btn-cancel" (click)="closeEdit()">
+        Cancel
+      </button>
+      <button class="btn-save" (click)="saveEdit()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Save Changes
+      </button>
     </div>
   </div>
 </div>
