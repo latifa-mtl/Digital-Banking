@@ -1,0 +1,55 @@
+<aside class="sidebar">
+ 
+  <!-- Logo -->
+  <div class="sidebar-logo">
+    <div class="logo-icon">
+      <i class="bi bi-bank2"></i>
+    </div>
+    <div class="logo-text">
+      <span class="brand">Finance<em>Core</em></span>
+      <span class="tagline">Espace Bancaire</span>
+    </div>
+  </div>
+ 
+  <!-- Nav -->
+  <nav class="sidebar-nav">
+ 
+    <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
+      <i class="bi bi-grid-1x2"></i>
+      <span>Dashboard</span>
+    </a>
+ 
+    <a routerLink="/customers" routerLinkActive="active" class="nav-link">
+      <i class="bi bi-people"></i>
+      <span>Clients</span>
+    </a>
+ 
+    <a routerLink="/accounts" routerLinkActive="active" class="nav-link">
+      <i class="bi bi-credit-card-2-front"></i>
+      <span>Comptes</span>
+    </a>
+ 
+ 
+ 
+    <a routerLink="/chatbot" routerLinkActive="active" class="nav-link nav-link--ai">
+      <i class="bi bi-robot"></i>
+      <span>Chatbot</span>
+     
+    </a>
+  </nav>
+ 
+  <!-- Footer / User -->
+  <div class="sidebar-footer">
+    <div class="user-avatar">
+      {{ username.charAt(0).toUpperCase() }}
+    </div>
+    <div class="user-info">
+      <p class="user-name">{{ username }}</p>
+      <p class="user-role">{{ isAdmin ? 'Administrateur' : 'Utilisateur' }}</p>
+    </div>
+    <button class="btn-logout" (click)="logout()" title="Déconnexion">
+      <i class="bi bi-box-arrow-right"></i>
+    </button>
+  </div>
+ 
+</aside>

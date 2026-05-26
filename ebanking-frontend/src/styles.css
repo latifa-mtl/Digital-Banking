@@ -1,27 +1,265 @@
-/* You can add global styles to this file, and also import other style files */
-/* Global Reset & Base */
-*, *::before, *::after { box-sizing: border-box; }
-
-html, body {
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Syne:wght@400;500;600;700&display=swap');
+ 
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+ 
+:root {
+  --gold:          #F4C300;
+  --gold-dim:      #c9a000;
+  --gold-pale:     rgba(244,195,0,0.12);
+  --black:         #0D0D0D;
+  --black-soft:    #1A1A1A;
+  --black-muted:   #2C2C2C;
+  --white:         #FFFFFF;
+  --silver:        #EAEAEA;
+  --silver-mid:    #D0D0D0;
+  --silver-dark:   #A8A8A8;
+ 
+  --bg:            #F5F5F3;
+  --bg-card:       #FFFFFF;
+  --text:          #0D0D0D;
+  --text-muted:    #767676;
+  --border:        #E2E2E2;
+ 
+  --success:       #2A7D4F;
+  --danger:        #C0392B;
+  --warning:       #F4C300;
+  --info:          #1A5C8A;
+ 
+  --shadow:        0 1px 8px rgba(0,0,0,0.07);
+  --shadow-lg:     0 6px 28px rgba(0,0,0,0.12);
+  --radius:        10px;
+  --radius-sm:     6px;
+  --transition:    all 0.18s ease;
+}
+ 
+* { box-sizing: border-box; }
+ 
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
   margin: 0;
-  padding: 0;
-  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-  font-size: 15px;
-  line-height: 1.5;
-  background: #f3f6fb;
-  color: #1a2b4a;
   -webkit-font-smoothing: antialiased;
 }
-
-h1, h2, h3, h4 { margin: 0; font-weight: 700; }
-
-a { color: inherit; }
-
-button { font-family: inherit; }
-
-input, select, textarea { font-family: inherit; }
-
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #c5d0e6; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #a8b8d8; }
+ 
+/* ---- Sidebar layout ---- */
+.layout-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+ 
+.main-content {
+  flex: 1;
+  padding: 32px 36px;
+  margin-left: 260px;
+  transition: var(--transition);
+}
+ 
+/* ---- Cards ---- */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+ 
+.card:hover {
+  box-shadow: var(--shadow-lg);
+}
+ 
+/* ---- Buttons ---- */
+.btn-primary {
+  background: var(--black);
+  border-color: var(--black);
+  color: var(--white);
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: var(--radius-sm);
+}
+ 
+.btn-primary:hover {
+  background: var(--black-soft);
+  border-color: var(--black-soft);
+  color: var(--gold);
+}
+ 
+.btn-accent {
+  background: var(--gold);
+  border: none;
+  color: var(--black);
+  font-weight: 700;
+  font-family: 'Syne', sans-serif;
+  border-radius: var(--radius-sm);
+  padding: 9px 22px;
+  cursor: pointer;
+  transition: var(--transition);
+  letter-spacing: 0.02em;
+}
+ 
+.btn-accent:hover {
+  background: var(--gold-dim);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(244,195,0,0.4);
+}
+ 
+/* ---- Page header ---- */
+.page-header {
+  margin-bottom: 30px;
+}
+ 
+.page-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--black);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+ 
+.page-header p {
+  color: var(--text-muted);
+  margin: 5px 0 0;
+  font-size: 0.88rem;
+  letter-spacing: 0.01em;
+}
+ 
+/* ---- Tables ---- */
+.table {
+  --bs-table-bg: transparent;
+}
+ 
+.table th {
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--silver-dark);
+  border-bottom: 1.5px solid var(--border);
+  padding: 11px 16px;
+}
+ 
+.table td {
+  padding: 12px 16px;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.88rem;
+}
+ 
+.table tbody tr:hover {
+  background: rgba(244,195,0,0.04);
+}
+ 
+/* ---- Badges ---- */
+.badge-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+ 
+.badge-activated { background: rgba(42,125,79,0.1);   color: #2A7D4F; }
+.badge-created   { background: rgba(26,92,138,0.1);   color: #1A5C8A; }
+.badge-suspended { background: rgba(192,57,43,0.1);   color: #C0392B; }
+ 
+/* ---- Alerts ---- */
+.alert {
+  border-radius: var(--radius-sm);
+  border: none;
+  font-size: 0.88rem;
+  font-family: 'Syne', sans-serif;
+}
+ 
+/* ---- Spinners ---- */
+.loading-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+  color: var(--text-muted);
+}
+ 
+/* ---- Stat cards ---- */
+.stat-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 24px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+ 
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--gold);
+  border-radius: 2px 0 0 2px;
+}
+ 
+.stat-card .stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  margin-bottom: 14px;
+  background: var(--gold-pale);
+  color: var(--gold-dim);
+}
+ 
+.stat-card .stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--black);
+  line-height: 1;
+  font-family: 'Cormorant Garamond', serif;
+  letter-spacing: -0.02em;
+}
+ 
+.stat-card .stat-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-top: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+ 
+/* ---- Form ---- */
+.form-control, .form-select {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 9px 14px;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.88rem;
+  transition: var(--transition);
+  background: var(--white);
+  color: var(--text);
+}
+ 
+.form-control:focus, .form-select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(244,195,0,0.15);
+  outline: none;
+}
+ 
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding: 16px;
+  }
+}

@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,700;1,700&family=Syne:wght@400;500;600;700&display=swap');
+ 
+.sidebar {
+  width: 260px;
+  background: #0D0D0D;
+  min-height: 100vh;
+  position: fixed;
+  left: 0; top: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  overflow: hidden;
+  border-right: 1px solid #1F1F1F;
+  font-family: 'Syne', sans-serif;
+}
+ 
+/* Gold accent line at top */
+.sidebar::before {
+  content: '';
+  display: block;
+  height: 3px;
+  background: #F4C300;
+  flex-shrink: 0;
+}
+ 
+/* ---- Logo ---- */
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 20px 18px;
+  border-bottom: 1px solid #1F1F1F;
+}
+ 
+.logo-icon {
+  width: 38px; height: 38px;
+  background: #F4C300;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; color: #0D0D0D;
+  flex-shrink: 0;
+}
+ 
+.logo-text .brand {
+  display: block;
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+}
+ 
+.logo-text .brand em {
+  font-style: normal;
+  color: #F4C300;
+}
+ 
+.logo-text .tagline {
+  font-size: 0.62rem;
+  color: #5A5A5A;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 2px;
+  display: block;
+}
+ 
+/* ---- Nav ---- */
+.sidebar-nav {
+  flex: 1;
+  padding: 16px 10px 10px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+ 
+.sidebar-nav::-webkit-scrollbar { display: none; }
+ 
+.nav-section-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #3A3A3A;
+  text-transform: uppercase;
+  padding: 0 8px;
+  margin: 18px 0 7px;
+  font-family: 'Syne', sans-serif;
+}
+ 
+.nav-section-label:first-child { margin-top: 4px; }
+ 
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 12px;
+  border-radius: 7px;
+  color: #717171;
+  text-decoration: none;
+  font-size: 0.87rem;
+  font-weight: 500;
+  transition: all 0.16s ease;
+  margin-bottom: 2px;
+  position: relative;
+  font-family: 'Syne', sans-serif;
+}
+ 
+.nav-link i {
+  font-size: 1rem;
+  width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+}
+ 
+.nav-link:hover {
+  background: #181818;
+  color: #EAEAEA;
+}
+ 
+.nav-link.active {
+  background: rgba(244, 195, 0, 0.10);
+  color: #F4C300;
+  font-weight: 600;
+}
+ 
+.nav-link.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 6px; bottom: 6px;
+  width: 2.5px;
+  background: #F4C300;
+  border-radius: 0 2px 2px 0;
+}
+ 
+.nav-link.active i { color: #F4C300; }
+ 
+/* AI link variant */
+.nav-link--ai {
+  border: 1px solid #1E1E1E;
+}
+ 
+.nav-link--ai:hover {
+  border-color: rgba(244,195,0,0.2);
+}
+ 
+.nav-link--ai.active {
+  border-color: rgba(244,195,0,0.25);
+}
+ 
+.ai-badge {
+  margin-left: auto;
+  font-size: 0.6rem;
+  font-weight: 700;
+  background: rgba(244,195,0,0.12);
+  color: #c9a000;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 1px solid rgba(244,195,0,0.18);
+}
+ 
+/* ---- Footer ---- */
+.sidebar-footer {
+  padding: 14px 14px 16px;
+  border-top: 1px solid #1A1A1A;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+ 
+.user-avatar {
+  width: 34px; height: 34px;
+  background: #F4C300;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.85rem;
+  color: #0D0D0D;
+  flex-shrink: 0;
+  letter-spacing: 0;
+}
+ 
+.user-info { flex: 1; overflow: hidden; }
+ 
+.user-name {
+  color: #EAEAEA;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'Syne', sans-serif;
+}
+ 
+.user-role {
+  color: #484848;
+  font-size: 0.68rem;
+  margin: 2px 0 0;
+  font-family: 'Syne', sans-serif;
+}
+ 
+.btn-logout {
+  width: 32px; height: 32px;
+  background: #181818;
+  border: 1px solid #222;
+  border-radius: 7px;
+  color: #484848;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem;
+  transition: all 0.16s ease;
+  flex-shrink: 0;
+}
+ 
+.btn-logout:hover {
+  background: rgba(192,57,43,0.15);
+  border-color: rgba(192,57,43,0.3);
+  color: #e05545;
+}

@@ -1,27 +1,39 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard';
-import { CustomersComponent } from './customers/customers';
-import { AccountsComponent } from './accounts/accounts';
-import { NewCustomerComponent } from './new-customer/new-customer';
-import { LoginComponent } from './login/login';
-import { ProfileComponent } from './profile/profile';
 import { authGuard } from './guards/auth-guard';
-import { AuthService } from './services/auth.service';
-import { CanActivateFn, Router } from '@angular/router';
-import { inject } from '@angular/core';
-
-const loginGuard: CanActivateFn = () => {
-  const auth = inject(AuthService);
-  const router = inject(Router);
-  return auth.isLoggedIn() ? router.createUrlTree(['/dashboard']) : true;
-};
+import { ChatBot } from './components/chat-bot/chat-bot';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
-  { path: 'dashboard',    component: DashboardComponent,    canActivate: [authGuard] },
-  { path: 'customers',    component: CustomersComponent,    canActivate: [authGuard] },
-  { path: 'accounts',     component: AccountsComponent,     canActivate: [authGuard] },
-  { path: 'new-customer', component: NewCustomerComponent,  canActivate: [authGuard] },
-  { path: 'profile',      component: ProfileComponent,      canActivate: [authGuard] },
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  {
+    path: 'login',
+    loadComponent: () => import('./components/login/login').then(m => m.Login)
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./components/dashboard/dashboard').then(m => m.Dashboard),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'customers',
+    loadComponent: () => import('./components/customers/customers').then(m => m.Customers),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'accounts',
+    loadComponent: () => import('./components/accounts/accounts').then(m => m.Accounts),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'accounts/:id',
+    loadComponent: () => import('./components/accounts/account-detail/account-detail').then(m => m.AccountDetail),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'chatbot',
+    component: ChatBot
+  },
+  {
+    path: '**',
+    loadComponent: () => import('./components/not-found/not-found').then(m => m.NotFound)
+  }
 ];

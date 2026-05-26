@@ -1,0 +1,178 @@
+/* PAGE HEADER */
+
+.page-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  margin-bottom:22px;
+}
+
+.page-header h2{
+  margin:0;
+
+  font-family:'Cormorant Garamond', serif;
+
+  font-size:1.75rem;
+  font-weight:700;
+
+  color:var(--black);
+
+  display:flex;
+  align-items:center;
+}
+
+.page-header p{
+  font-size:.82rem;
+  color:var(--muted);
+
+  margin-top:4px;
+}
+
+/* HEADER BUTTONS */
+
+.page-header .btn{
+  background: transparent !important;
+
+  border:1px solid var(--border);
+
+  color:var(--black-soft);
+
+  border-radius:8px;
+
+  padding:9px 16px;
+
+  font-size:.82rem;
+  font-weight:700;
+
+  font-family:'Syne', sans-serif;
+
+  transition:var(--trans);
+
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+/* HOVER EFFECT */
+
+.page-header .btn:hover{
+
+  background:var(--gold) !important;
+
+  border-color:var(--gold);
+
+  color:var(--black);
+
+  transform:translateY(-1px);
+}
+
+/* OPTIONAL: subtle active click */
+
+.page-header .btn:active{
+  transform:scale(.98);
+}
+
+/* TABLE CARD */
+
+.table-card{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+}
+
+/* TABLE */
+
+.accounts-table thead th{
+  background:var(--bg);
+  color:var(--muted);
+
+  font-size:.72rem;
+  font-weight:700;
+
+  text-transform:uppercase;
+  letter-spacing:.08em;
+
+  padding:14px 18px;
+  border-bottom:1px solid var(--border);
+}
+
+.accounts-table tbody td{
+  padding:16px 18px;
+  vertical-align:middle;
+  border-top:1px solid var(--border);
+
+  font-size:.84rem;
+  color:var(--black-soft);
+}
+
+.accounts-table tbody tr{
+  transition:var(--trans);
+}
+
+.accounts-table tbody tr:hover{
+  background:var(--gold-pale);
+}
+
+/* TYPE BADGES */
+
+.type-badge{
+  display:inline-flex;
+  align-items:center;
+
+  padding:5px 10px;
+
+  border-radius:20px;
+
+  font-size:.72rem;
+  font-weight:700;
+
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+
+.current-type{
+  background:var(--gold-pale);
+  color:var(--gold-dim);
+}
+
+.saving-type{
+  background:var(--success-bg);
+  color:var(--success-fg);
+}
+
+/* ACTION BUTTON */
+
+.btn-table-action{
+
+  display:inline-flex;
+  align-items:center;
+
+  gap:6px;
+
+  padding:8px 14px;
+
+  border-radius:7px;
+
+  text-decoration:none;
+
+  background:var(--black);
+  color:var(--gold);
+
+  border:1px solid var(--black);
+
+  font-size:.8rem;
+  font-weight:600;
+
+  transition:var(--trans);
+}
+
+.btn-table-action:hover{
+
+  background:var(--gold);
+  border-color:var(--gold);
+
+  color:var(--black);
+
+}

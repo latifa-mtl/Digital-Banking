@@ -1,0 +1,284 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Syne:wght@400;500;600;700&display=swap');
+
+:host {
+  /* same variables as above */
+  --gold: #F4C300; --gold-dim: #c9a000; --gold-pale: rgba(244,195,0,0.10);
+  --black: #0D0D0D; --black-soft: #1A1A1A;
+  --silver: #EAEAEA; --silver-mid: #D0D0D0; --muted: #7A7A7A;
+  --border: #E6E6E6; --white: #FFFFFF; --bg: #F7F7F5;
+  --success-bg: rgba(42,125,79,0.09); --success-fg: #2A7D4F;
+  --danger-bg: rgba(192,57,43,0.09);  --danger-fg: #C0392B;
+  --trans: all 0.17s ease;
+  font-family: 'Syne', sans-serif;
+}
+
+.section-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--silver-mid);
+  margin: 22px 0 10px;
+}
+
+/* ── Back button ── */
+.btn-back {
+  width: 36px; height: 36px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--black);
+  text-decoration: none;
+  transition: var(--trans);
+  flex-shrink: 0;
+}
+
+.btn-back:hover { background: var(--gold); border-color: var(--gold); }
+
+/* ── Account info strip ── */
+.account-info-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.account-info-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 14px 16px;
+  transition: var(--trans);
+}
+
+.account-info-card:hover { border-color: var(--gold); }
+
+.account-info-card.balance-highlight {
+  background: var(--black);
+  border-color: var(--black);
+}
+
+.info-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+
+.balance-highlight .info-label { color: #555; }
+
+.info-value {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--black-soft);
+}
+
+.balance-highlight .info-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  color: var(--gold);
+  letter-spacing: -0.01em;
+}
+
+/* ── Operations bar ── */
+.operations-bar{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+
+  padding:18px 20px 10px;
+  border-bottom:1px solid var(--border);
+  background:var(--white);
+}
+
+.op-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+
+  border-radius: 7px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-family: 'Syne', sans-serif;
+  border: 1.5px solid;
+  cursor: pointer;
+  transition: var(--trans);
+}
+
+.debit-btn    { background: var(--danger-bg);  border-color: var(--danger-fg);  color: var(--danger-fg); }
+.credit-btn   { background: var(--success-bg); border-color: var(--success-fg); color: var(--success-fg); }
+.transfer-btn { background: var(--gold-pale);  border-color: var(--gold-dim);   color: var(--gold-dim); }
+
+.debit-btn:hover    { background: var(--danger-fg);  color: #fff; }
+.credit-btn:hover   { background: var(--success-fg); color: #fff; }
+.transfer-btn:hover { background: var(--gold);        border-color: var(--gold); color: var(--black); }
+
+/* ── Operation panel ── */
+.operation-panel {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  border-radius: 9px;
+  padding: 18px 22px;
+  margin-bottom: 4px;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.operation-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.operation-panel-header h6 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.submit-btn{
+  background: var(--gold);
+  color: var(--black);
+  border: none;
+  padding: 9px 18px;
+  border-radius: 7px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-family: 'Syne', sans-serif;
+  cursor: pointer;
+  transition: var(--trans);
+}
+
+.submit-btn:hover { background: var(--gold-dim); }
+
+
+
+/* ── Operations table card ── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.table-toolbar h6 {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--black);
+}
+
+.btn-refresh {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 0.78rem;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Syne', sans-serif;
+  transition: var(--trans);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-refresh:hover { border-color: var(--gold); color: var(--gold-dim); }
+
+/* Table */
+.table thead th {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  background: var(--bg);
+  padding: 10px 18px;
+}
+
+.table tbody tr {
+  border-top: 1px solid var(--border);
+  transition: var(--trans);
+}
+
+.table tbody tr:hover { background: var(--gold-pale); }
+
+.table tbody td {
+  padding: 10px 18px;
+  font-size: 0.83rem;
+  color: var(--black-soft);
+  vertical-align: middle;
+}
+
+/* Operation type badge */
+.op-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.op-credit { background: var(--success-bg); color: var(--success-fg); }
+.op-debit  { background: var(--danger-bg);  color: var(--danger-fg); }
+
+/* Amount */
+.op-amount { font-weight: 700; font-size: 0.85rem; }
+.amount-credit { color: var(--success-fg); }
+.amount-debit  { color: var(--danger-fg); }
+
+/* ── Pagination ── */
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 12px 18px;
+  border-top: 1px solid var(--border);
+}
+
+.pg-btn {
+  width: 32px; height: 32px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--black);
+  transition: var(--trans);
+}
+
+.pg-btn:hover:not(:disabled) { background: var(--gold); border-color: var(--gold); }
+.pg-btn.active { background: var(--black); border-color: var(--black); color: var(--gold); font-weight: 700; }
+.pg-btn:disabled { opacity: 0.35; cursor: not-allowed; }

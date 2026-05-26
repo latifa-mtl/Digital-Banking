@@ -1,0 +1,91 @@
+
+<div class="chat-panel" >
+
+  <!-- HEADER -->
+  <div class="chat-header">
+    <div class="header-left">
+      <div class="bot-avatar">
+        <i class="bi bi-bank2"></i>
+      </div>
+
+      <div class="header-info">
+        <div class="bot-name">BankBot</div>
+       
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="header-btn" (click)="clearChat()">⟳</button>
+      <button class="header-btn close-btn" >✕</button>
+    </div>
+  </div>
+
+  <!-- MESSAGES -->
+  <div class="chat-messages">
+
+    @for (msg of messages; track $index) {
+      <div class="message-row" [class.user-row]="msg.role === 'user'" [class.bot-row]="msg.role === 'bot'">
+
+        <div class="msg-avatar" [class.user-msg-avatar]="msg.role === 'user'" [class.bot-msg-avatar]="msg.role === 'bot'">
+          <i class="bi" [ngClass]="msg.role === 'user' ? 'bi-person' : 'bi-robot'"></i>
+        </div>
+
+        <div class="message-bubble" [class.user-bubble]="msg.role === 'user'" [class.bot-bubble]="msg.role === 'bot'">
+
+          @if (msg.role === 'bot') {
+            <div markdown[data]="msg.content"></div>
+          } @else {
+            {{ msg.content }}
+          }
+
+          <div class="bubble-time">{{ formatTime(msg.timestamp) }}</div>
+        </div>
+
+      </div>
+    }
+
+    <!-- streaming -->
+    @if (progress || response) {
+      <div class="message-row bot-row">
+
+        <div class="msg-avatar bot-msg-avatar">
+          <i class="bi bi-robot"></i>
+        </div>
+
+        <div class="message-bubble bot-bubble">
+          @if (response) {
+            <div markdown[data]="response"></div>
+          } @else {
+            <div class="typing">
+              <span></span><span></span><span></span>
+            </div>
+          }
+        </div>
+
+      </div>
+    }
+
+    <div #scrollAnchor></div>
+  </div>
+
+  <!-- INPUT -->
+  <div class="chat-input-area">
+
+    <div class="input-wrapper">
+      <textarea
+        [(ngModel)]="query"
+        (keydown)="onKeydown($event)"
+        [disabled]="progress"
+        placeholder="Posez votre question bancaire...">
+      </textarea>
+
+      <button (click)="askAgent()" [disabled]="!query.trim() || progress">
+        ➤
+      </button>
+    </div>
+
+    <div class="input-hint">Enter pour envoyer</div>
+
+  </div>
+
+</div>

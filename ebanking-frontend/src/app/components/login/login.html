@@ -1,0 +1,87 @@
+<div class="login-page">
+  <div class="login-container">
+ 
+    <!-- Brand mark -->
+    <div class="brand">
+      <div class="brand-icon">
+        <i class="bi bi-bank2"></i>
+      </div>
+      <div class="brand-name">Finance<span>Core</span></div>
+    </div>
+ 
+    <!-- Heading -->
+    <div class="login-heading">
+      <h1>Connexion</h1>
+      <p>Accédez à votre espace bancaire sécurisé</p>
+    </div>
+ 
+    <!-- Error -->
+    <div class="alert alert-danger d-flex align-items-center gap-2" *ngIf="error">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      {{ error }}
+    </div>
+ 
+    <!-- Form -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+ 
+      <div class="field">
+        <label for="username">Nom d'utilisateur</label>
+        <div class="input-wrap">
+          <i class="bi bi-person input-icon"></i>
+          <input
+            id="username"
+            type="text"
+            class="form-control"
+            formControlName="username"
+            placeholder="Votre identifiant"
+            autocomplete="username"
+          >
+        </div>
+        <span class="field-err" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+          Ce champ est requis
+        </span>
+      </div>
+ 
+      <div class="field">
+        <label for="password">Mot de passe</label>
+        <div class="input-wrap">
+          <i class="bi bi-lock input-icon"></i>
+          <input
+            id="password"
+            [type]="showPassword ? 'text' : 'password'"
+            class="form-control"
+            formControlName="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+          >
+          <button type="button" class="toggle-pass" (click)="togglePassword()">
+            <i [class]="'bi ' + (showPassword ? 'bi-eye-slash' : 'bi-eye')"></i>
+          </button>
+        </div>
+        <span class="field-err" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          Ce champ est requis
+        </span>
+      </div>
+ 
+      <button type="submit" class="btn-submit" [disabled]="loginForm.invalid || loading">
+        <span *ngIf="!loading">
+          Se connecter <i class="bi bi-arrow-right-short"></i>
+        </span>
+        <span *ngIf="loading" class="d-flex align-items-center justify-content-center gap-2">
+          <span class="spinner-border spinner-border-sm"></span>
+          Connexion…
+        </span>
+      </button>
+ 
+    </form>
+ 
+    <div class="login-footer">
+      <span>&copy; 2026 - Tous droits réservés</span>
+    </div>
+ 
+  </div>
+ 
+  <!-- Subtle decorative strip -->
+  <div class="gold-strip"></div>
+</div>
+ 

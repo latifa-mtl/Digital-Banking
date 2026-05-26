@@ -1,0 +1,230 @@
+.login-page {
+  min-height: 100vh;
+  background: #F7F7F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-family: 'Syne', sans-serif;
+}
+ 
+/* Gold strip at bottom */
+.gold-strip {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--gold);
+}
+ 
+/* Container card */
+.login-container {
+  width: 100%;
+  max-width: 420px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 48px 44px 40px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+  position: relative;
+}
+ 
+/* Brand */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+}
+ 
+.brand-icon {
+  width: 40px; height: 40px;
+  background: var(--black);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.15rem;
+  color: var(--gold);
+}
+ 
+.brand-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--black);
+  letter-spacing: 0.02em;
+}
+ 
+.brand-name span {
+  color: var(--gold-dim);
+}
+ 
+/* Heading */
+.login-heading {
+  margin-bottom: 32px;
+}
+ 
+.login-heading h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--black);
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+ 
+.login-heading p {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0;
+  font-weight: 400;
+}
+ 
+/* Fields */
+.field {
+  margin-bottom: 20px;
+}
+ 
+.field label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 7px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+ 
+.input-wrap {
+  position: relative;
+}
+ 
+.input-icon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--silver-mid);
+  font-size: 0.95rem;
+  pointer-events: none;
+  transition: var(--trans);
+}
+ 
+.input-wrap:focus-within .input-icon {
+  color: var(--gold-dim);
+}
+ 
+.form-control {
+  padding-left: 38px !important;
+  padding-right: 42px;
+  height: 46px;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  width: 100%;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.88rem;
+  color: var(--black);
+  transition: var(--trans);
+}
+ 
+.form-control:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-glow);
+  outline: none;
+}
+ 
+.form-control::placeholder {
+  color: #BDBDBD;
+}
+ 
+.toggle-pass {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--silver-mid);
+  cursor: pointer;
+  padding: 4px;
+  font-size: 0.9rem;
+  transition: var(--trans);
+  line-height: 1;
+}
+ 
+.toggle-pass:hover { color: var(--black); }
+ 
+.field-err {
+  display: block;
+  color: #C0392B;
+  font-size: 0.75rem;
+  margin-top: 5px;
+}
+ 
+/* Submit */
+.btn-submit {
+  width: 100%;
+  padding: 13px;
+  background: var(--gold);
+  color: var(--black);
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--trans);
+  margin-top: 10px;
+  font-family: 'Syne', sans-serif;
+  letter-spacing: 0.03em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+ 
+.btn-submit i {
+  font-size: 1.1rem;
+  margin-left: 2px;
+}
+ 
+.btn-submit:hover:not(:disabled) {
+  background: var(--gold-dim);
+  box-shadow: 0 4px 18px rgba(244,195,0,0.35);
+  transform: translateY(-1px);
+}
+ 
+.btn-submit:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: none;
+}
+ 
+.btn-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+ 
+/* Footer */
+.login-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 28px;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+ 
+.dot {
+  color: var(--silver-mid);
+}
+ 
+/* Responsive */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 36px 24px 30px;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    min-height: 100vh;
+  }
+}

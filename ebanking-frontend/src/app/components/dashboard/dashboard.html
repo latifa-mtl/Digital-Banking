@@ -1,0 +1,176 @@
+<!-- dashboard.component.html -->
+
+
+<!-- Page title block -->
+<div class="dash-title-block">
+  <h1 class="dash-greeting">{{ getGreeting() }}, <span>{{ username }}</span></h1>
+  <p class="dash-subtitle">Voici l'état de votre portefeuille bancaire aujourd'hui.</p>
+</div>
+
+<!-- Loading -->
+<div class="dash-loading" *ngIf="loading">
+  <span class="spin-ring"></span>
+  <span>Chargement des données…</span>
+</div>
+
+<ng-container *ngIf="!loading && stats">
+
+  <!-- ── Row 1: Solde total (hero) + 3 counters side by side ── -->
+  <div class="metrics-row">
+
+    <!-- Hero metric: solde -->
+    <div class="metric-hero">
+      <div class="hero-label">Solde total</div>
+      <div class="hero-amount">{{ formatAmount(stats.totalBalance) }}</div>
+      <div class="hero-currency">MAD</div>
+      <div class="hero-rule"></div>
+      <div class="hero-hint">Tous comptes confondus</div>
+    </div>
+
+    <!-- 3 counter tiles stacked -->
+    <div class="counter-stack">
+      <div class="counter-tile">
+        <div class="counter-icon ci-gold">
+          <i class="bi bi-people"></i>
+        </div>
+        <div class="counter-body">
+          <div class="counter-val">{{ stats.totalCustomers }}</div>
+          <div class="counter-lbl">Clients</div>
+        </div>
+        <a routerLink="/customers" class="counter-link">
+          <i class="bi bi-chevron-right"></i>
+        </a>
+      </div>
+
+      <div class="counter-tile">
+        <div class="counter-icon ci-silver">
+          <i class="bi bi-credit-card-2-front"></i>
+        </div>
+        <div class="counter-body">
+          <div class="counter-val">{{ stats.totalAccounts }}</div>
+          <div class="counter-lbl">Comptes ouverts</div>
+        </div>
+        <a routerLink="/accounts" class="counter-link">
+          <i class="bi bi-chevron-right"></i>
+        </a>
+      </div>
+
+      <div class="counter-tile">
+        <div class="counter-icon ci-dark">
+          <i class="bi bi-receipt"></i>
+        </div>
+        <div class="counter-body">
+          <div class="counter-val">{{ stats.totalOperations }}</div>
+          <div class="counter-lbl">Opérations</div>
+        </div>
+        <div class="counter-link muted">
+          <i class="bi bi-three-dots"></i>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Row 2: Flux financiers (full width) ── -->
+  <div class="section-label">Flux financiers</div>
+  <div class="flux-row">
+
+    <!-- Crédits -->
+    <div class="flux-card flux-credit">
+      <div class="flux-top">
+        <div class="flux-icon">
+          <i class="bi bi-arrow-down-left-circle"></i>
+        </div>
+        <div class="flux-tag">Entrées</div>
+      </div>
+      <div class="flux-amount">{{ formatAmount(stats.totalCredits) }} <span>MAD</span></div>
+      <div class="flux-label">Crédits cumulés</div>
+      <div class="flux-track">
+        <div class="flux-fill flux-fill--credit" style="width: 80%"></div>
+      </div>
+    </div>
+
+    <!-- Débits -->
+    <div class="flux-card flux-debit">
+      <div class="flux-top">
+        <div class="flux-icon">
+          <i class="bi bi-arrow-up-right-circle"></i>
+        </div>
+        <div class="flux-tag">Sorties</div>
+      </div>
+      <div class="flux-amount">{{ formatAmount(stats.totalDebits) }} <span>MAD</span></div>
+      <div class="flux-label">Débits cumulés</div>
+      <div class="flux-track">
+        <div class="flux-fill flux-fill--debit"
+             [style.width.%]="stats.totalCredits > 0 ? (stats.totalDebits / stats.totalCredits * 100) : 0">
+        </div>
+      </div>
+    </div>
+
+    <!-- Types de comptes -->
+    <div class="flux-card flux-types">
+      <div class="flux-top">
+        <div class="flux-icon">
+          <i class="bi bi-pie-chart"></i>
+        </div>
+        <div class="flux-tag">Répartition</div>
+      </div>
+      <div class="types-split">
+        <div class="type-block">
+          <div class="type-num">{{ stats.totalCurrentAccounts }}</div>
+          <div class="type-lbl">
+            <i class="bi bi-credit-card"></i>
+            Courants
+          </div>
+        </div>
+        <div class="types-sep"></div>
+        <div class="type-block">
+          <div class="type-num">{{ stats.totalSavingAccounts }}</div>
+          <div class="type-lbl">
+            <i class="bi bi-piggy-bank"></i>
+            Épargnes
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Row 3: Bar chart (full width) ── -->
+  <div class="section-label">Activité mensuelle</div>
+  <div class="chart-wrap">
+    <div class="chart-meta">
+      <span class="chart-total">{{ stats.totalOperations }} opérations</span>
+      <span class="chart-period">sur 6 mois</span>
+    </div>
+    <div class="bars">
+      <div class="bar-col" *ngFor="let month of chartMonths; let i = index">
+        <div class="bar-val">{{ chartValues[i] }}</div>
+        <div class="bar-body">
+          <div class="bar-fill" [style.height.%]="getBarHeight(chartValues[i])"></div>
+        </div>
+        <div class="bar-lbl">{{ month }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Row 4: Quick actions (admin only) ── -->
+  @if (isAdmin) {
+  <div class="section-label">Actions rapides</div>
+  <div class="actions-strip">
+    <a routerLink="/customers" class="action-btn">
+      <i class="bi bi-person-plus"></i>
+      <span>Nouveau client</span>
+    </a>
+    <a routerLink="/accounts" class="action-btn">
+      <i class="bi bi-credit-card-2-front"></i>
+      <span>Nouveau compte</span>
+    </a>
+    <a routerLink="/accounts" class="action-btn">
+      <i class="bi bi-arrow-left-right"></i>
+      <span>Virement</span>
+    </a>
+  </div>
+  }
+
+</ng-container>

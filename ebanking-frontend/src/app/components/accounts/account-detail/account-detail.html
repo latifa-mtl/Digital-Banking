@@ -1,0 +1,192 @@
+<!-- Header -->
+<div class="page-header">
+  <div class="d-flex align-items-center gap-3">
+    <a routerLink="/accounts" class="btn-back">
+      <i class="bi bi-arrow-left"></i>
+    </a>
+    <div>
+      <h2><i class="bi bi-clock-history me-2"></i>Historique des Opérations</h2>
+      <p class="text-muted mb-0" *ngIf="account">
+        Compte : <code>{{ account.id }}</code>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Alert -->
+<div class="alert alert-success" *ngIf="successMsg">
+  <i class="bi bi-check-circle-fill me-2"></i>{{ successMsg }}
+</div>
+<div class="alert alert-danger" *ngIf="error && !activeOperation">
+  <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+</div>
+
+<!-- Account info card -->
+<div class="account-info-row" *ngIf="account">
+  <div class="account-info-card">
+    <div class="info-label">Type</div>
+    <div class="info-value">
+      <i [class]="'bi me-1 ' + (account.type === 'CurrentAccount' ? 'bi-credit-card' : 'bi-piggy-bank')"></i>
+      {{ account.type === 'CurrentAccount' ? 'Compte Courant' : 'Compte Épargne' }}
+    </div>
+  </div>
+  <div class="account-info-card balance-highlight">
+    <div class="info-label">Solde actuel</div>
+    <div class="info-value balance">{{ account.balance | number:'1.2-2' }} {{ account.currency }}</div>
+  </div>
+  <div class="account-info-card" *ngIf="account.type === 'CurrentAccount'">
+    <div class="info-label">Découvert autorisé</div>
+    <div class="info-value">{{ asCurrentAccount(account).overDraft | number:'1.2-2' }} {{ account.currency }}</div>
+  </div>
+  <div class="account-info-card" *ngIf="account.type === 'SavingAccount'">
+    <div class="info-label">Taux d'intérêt</div>
+    <div class="info-value">{{ asSavingAccount(account).interestRate }}%</div>
+  </div>
+  <div class="account-info-card">
+    <div class="info-label">Client</div>
+    <div class="info-value">{{ account.customerDTO.name }}</div>
+  </div>
+  
+</div>
+
+<!-- Operations buttons -->
+<!-- <div class="operations-bar">
+  <button class="op-btn debit-btn" (click)="openOperation('debit')">
+    <i class="bi bi-arrow-up-circle-fill"></i> Débit
+  </button>
+  <button class="op-btn credit-btn" (click)="openOperation('credit')">
+    <i class="bi bi-arrow-down-circle-fill"></i> Crédit
+  </button>
+  <button class="op-btn transfer-btn" (click)="openOperation('transfer')">
+    <i class="bi bi-arrow-left-right"></i> Virement
+  </button>
+</div> -->
+
+<!-- Operation form panel -->
+<div class="operation-panel" *ngIf="activeOperation">
+  <div class="operation-panel-header">
+    <h6>
+      <i [class]="'bi me-2 ' +
+        (activeOperation === 'debit' ? 'bi-arrow-up-circle' :
+         activeOperation === 'credit' ? 'bi-arrow-down-circle' : 'bi-arrow-left-right')">
+      </i>
+      {{ activeOperation === 'debit' ? 'Opération de Débit' :
+      activeOperation === 'credit' ? 'Opération de Crédit' : 'Virement' }}
+    </h6>
+    <button class="btn btn-sm btn-outline-secondary" (click)="closeOperation()">
+      <i class="bi bi-x"></i> Annuler
+    </button>
+  </div>
+
+  <form [formGroup]="operationForm" (ngSubmit)="executeOperation()" class="operation-form">
+    <div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+
+    <div class="row g-3">
+      <div [class]="activeOperation === 'transfer' ? 'col-md-3' : 'col-md-4'">
+        <label class="form-label fw-semibold">Montant</label>
+        <div class="input-group">
+          <input type="number" class="form-control" formControlName="amount" min="1" step="0.01">
+          <span class="input-group-text">{{ account?.currency ?? 'MAD' }}</span>
+        </div>
+      </div>
+      <div [class]="activeOperation === 'transfer' ? 'col-md-4' : 'col-md-5'">
+        <label class="form-label fw-semibold">Description</label>
+        <input type="text" class="form-control" formControlName="description" placeholder="Motif de l'opération">
+      </div>
+      <div class="col-md-4" *ngIf="activeOperation === 'transfer'">
+        <label class="form-label fw-semibold">Compte destination</label>
+        <input type="text" class="form-control" formControlName="destinationAccount" placeholder="ID du compte cible">
+      </div>
+      <div class="col-md-1 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary submit-btn w-100" [disabled]="operationForm.invalid || operationLoading">
+          <span *ngIf="!operationLoading"><i class="bi bi-check-lg"></i></span>
+          <span *ngIf="operationLoading"><span class="spinner-border spinner-border-sm"></span></span>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- Operations Table -->
+<div class="card mt-4">
+  <div class="card-body p-0">
+
+    <!-- buttons right above table -->
+    <div class="operations-bar">
+      <button class="op-btn debit-btn" (click)="openOperation('debit')">
+        <i class="bi bi-arrow-up-circle-fill"></i> Débit
+      </button>
+
+      <button class="op-btn credit-btn" (click)="openOperation('credit')">
+        <i class="bi bi-arrow-down-circle-fill"></i> Crédit
+      </button>
+
+      <button class="op-btn transfer-btn" (click)="openOperation('transfer')">
+        <i class="bi bi-arrow-left-right"></i> Virement
+      </button>
+    </div>
+
+    <div class="table-toolbar d-flex align-items-center justify-content-between px-4 py-3">
+      <h6 class="mb-0 fw-bold">Opérations</h6>
+      
+    </div>
+
+    <div class="loading-overlay" *ngIf="loading">
+      <div class="spinner-border text-primary"></div>
+    </div>
+
+    <div class="table-responsive" *ngIf="!loading && history">
+      <table class="table mb-0">
+        <thead>
+        <tr>
+          <th>#ID</th>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th class="text-end">Montant</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let op of history.accountOperationDTOS">
+          <td><small class="text-muted">#{{ op.id }}</small></td>
+          <td>{{ op.operationDate | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>
+              <span [class]="'op-type op-' + op.type.toLowerCase()">
+                <i [class]="'bi me-1 ' + (op.type === 'CREDIT' ? 'bi-arrow-down-circle-fill' : 'bi-arrow-up-circle-fill')"></i>
+                {{ op.type }}
+              </span>
+          </td>
+          <td>{{ op.description }}</td>
+          <td class="text-end">
+              <span [class]="'op-amount ' + (op.type === 'CREDIT' ? 'amount-credit' : 'amount-debit')">
+                {{ op.type === 'CREDIT' ? '+' : '-' }}{{ op.amount | number:'1.2-2' }}
+              </span>
+          </td>
+        </tr>
+        <tr *ngIf="history.accountOperationDTOS.length === 0">
+          <td colspan="5" class="text-center py-5 text-muted">
+            <i class="bi bi-inbox fs-1 d-block opacity-25 mb-2"></i>
+            Aucune opération
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-bar" *ngIf="history && history.totalPages > 1">
+      <button class="pg-btn" [disabled]="currentPage === 0" (click)="loadHistory(currentPage - 1)">
+        <i class="bi bi-chevron-left"></i>
+      </button>
+      <button
+        *ngFor="let p of getPages()"
+        class="pg-btn"
+        [class.active]="p === currentPage"
+        (click)="loadHistory(p)"
+      >{{ p + 1 }}</button>
+      <button class="pg-btn" [disabled]="currentPage >= history.totalPages - 1" (click)="loadHistory(currentPage + 1)">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,30 +1,30 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavbarComponent } from './navbar/navbar';
-import { Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
+import { Navbar } from './components/navbar/navbar';
+import { AuthService } from './services/auth';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule,RouterOutlet, NavbarComponent],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  imports: [RouterOutlet, CommonModule, Navbar],
+  template: `
+    <div class="layout-wrapper">
+      <app-navbar *ngIf="isLoggedIn"></app-navbar>
+      <div [class]="isLoggedIn ? 'main-content' : 'w-100'">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  `
 })
-export class App {
-  protected readonly title = signal('ebanking-frontend');
-  showNavbar = true;
+export class App implements OnInit {
+  isLoggedIn = false;
 
-  constructor(private router: Router) {
+  constructor(private authService: AuthService) {}
 
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event: any) => {
-
-        const hiddenRoutes = ['/login'];
-
-        this.showNavbar = !hiddenRoutes.includes(event.urlAfterRedirects);
-      });
+  ngOnInit(): void {
+    this.authService.currentUser$.subscribe(user => {
+      this.isLoggedIn = !!user;
+    });
   }
 }
