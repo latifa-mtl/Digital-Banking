@@ -30,15 +30,24 @@ A full-stack banking management application built with **Angular 17** (frontend)
 
 ---
 
+### ✏️ Edit Customer
+![Edit Customer](screenshots/edit-customer.png)
+
+---
+
 ### 🏦 Accounts
 ![Accounts](screenshots/accounts.png)
 > Master–detail layout: filterable account cards on the left (by type and status), detail panel on the right showing balance, interest rate, and full paginated transaction history with color-coded DEBIT/CREDIT rows.
 
 ---
 
-### 💸 Transfer Modal
-![Transfer Funds](screenshots/transfer.png)
-> Transfer modal with real database account dropdowns — source and destination populated from the live accounts list, showing owner name, truncated ID, and current balance. Includes an account preview chip after each selection.
+### 📄 Account Details
+![Account Details](screenshots/detail-account.png)
+
+---
+
+### 🤖 Chatbot Assistant
+![Chatbot](screenshots/chat-bot.png)
 
 ---
 
